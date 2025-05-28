@@ -1,0 +1,8 @@
+{
+  "sepolia": {
+    "OPS_TOKEN": {
+      "address": "0x3DFcc1C8bd62EC42513E1424945546D447Ef3A2E",
+      "startBlock": 8423553
+    }
+  }
+}
