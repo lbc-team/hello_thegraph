@@ -74,6 +74,10 @@ export default function Home() {
   // 新增：转账记录查询
   const fetchRecords = async (address: string) => {
     const lowerAddr = address.toLowerCase();
+    // 一个带参数的 GraphQL 查询 ， 查询 20 条转账记录， 按时间排序， 按 from 和 to 查询
+    // transfersIn transfersOut 是两个查询的别名
+
+    
     const query = gql`
       query GetTransfers($addr: String!) {
         transfersIn: transfers(where: {to: $addr}, orderBy: blockTimestamp, orderDirection: desc, first: 20) {
