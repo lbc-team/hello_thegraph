@@ -22,7 +22,7 @@ import { GraphQLClient, gql } from 'graphql-request';
 const OPS_TOKEN_ADDRESS = "0x3DFcc1C8bd62EC42513E1424945546D447Ef3A2E";
 
 export default function Home() {
-  const { address, isConnected } = useAccount();
+  const { address: addr, isConnected } = useAccount();
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
   const chainId = useChainId();
@@ -31,7 +31,7 @@ export default function Home() {
 
   // 使用 useBalance 获取余额
   const { data: balance } = useBalance({
-    address,
+    address: addr,
   });
 
   // 使用 useReadContract 读取合约数据
@@ -39,7 +39,7 @@ export default function Home() {
     address: OPS_TOKEN_ADDRESS as `0x${string}`,
     abi: TOKEN_ABI,
     functionName: 'balanceOf',
-    args: [address],
+    args: [addr],
   });
 
   // 使用 useWriteContract 写入合约数据
@@ -72,12 +72,11 @@ export default function Home() {
   }
 
   // 新增：转账记录查询
-  const fetchRecords = async (address: string) => {
-    const lowerAddr = address.toLowerCase();
+  const fetchRecords = async (addr: string) => {
+    const lowerAddr = addr.toLowerCase();
     // 一个带参数的 GraphQL 查询 ， 查询 20 条转账记录， 按时间排序， 按 from 和 to 查询
     // transfersIn transfersOut 是两个查询的别名
 
-    
     const query = gql`
       query GetTransfers($addr: String!) {
         transfersIn: transfers(where: {to: $addr}, orderBy: blockTimestamp, orderDirection: desc, first: 20) {
@@ -100,9 +99,9 @@ export default function Home() {
     data: records = [],
     isLoading: loadingRecords,
   } = useQuery({
-    queryKey: ['transfers', address],
-    queryFn: () => address ? fetchRecords(address) : Promise.resolve([]),
-    enabled: !!address,
+    queryKey: ['transfers', addr],
+    queryFn: () => addr ? fetchRecords(addr) : Promise.resolve([]),
+    enabled: !!addr,
   });
 
   // 切换网络函数
@@ -173,7 +172,7 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600">钱包地址:</p>
-                <p className="font-mono break-all">{address}</p>
+                <p className="font-mono break-all">{addr}</p>
               </div>
               <button
                 onClick={() => disconnect()}
@@ -269,7 +268,7 @@ export default function Home() {
                       {records.map((rec: any) => (
                         <tr key={rec.id} className="border-b">
                           <td className="px-2 py-1 border">{new Date(Number(rec.blockTimestamp) * 1000).toLocaleString()}</td>
-                          <td className="px-2 py-1 border">{rec.to.toLowerCase() === address?.toLowerCase() ? '转入' : '转出'}</td>
+                          <td className="px-2 py-1 border">{rec.to.toLowerCase() === addr?.toLowerCase() ? '转入' : '转出'}</td>
                           <td className="px-2 py-1 border font-mono break-all">{rec.from}</td>
                           <td className="px-2 py-1 border font-mono break-all">{rec.to}</td>
                           <td className="px-2 py-1 border">{parseFloat(formatUnits(BigInt(rec.value), 18)).toFixed(4)}</td>
