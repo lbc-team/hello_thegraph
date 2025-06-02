@@ -93,11 +93,29 @@ ops-token 替换为你自己的工程名字。TheGraph 会将代码发布到 IPF
 
 
 TheGraph 网络会帮我们索引数据， 等待一会，就可以开始查询了。
+ 
 
 
 TheGraph 控制台提供了一个 Playground , 方便我们测试查询：
 ![](https://img.learnblockchain.cn/pics/20250528183312.png)
 
+
+https://thegraph.com/studio/subgraph/ops-token/playground
+
+```
+{
+  transfers(first: 5) {
+    id
+    from
+    to
+    value
+  }
+  users(first: 5) {
+    id
+    balance
+  }
+}
+```
 
 测试通过之后， 就可以正式在 thegraph 上发布
 ![](https://img.learnblockchain.cn/pics/20250528183122.png)
