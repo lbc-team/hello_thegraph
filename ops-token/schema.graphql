@@ -2,8 +2,8 @@
 # @entity 表示这个类型会被映射为一个可以被存储、查询的数据库表
 type Transfer @entity(immutable: true) {
   id: Bytes!                # 唯一ID（通常用 transaction hash + log index 拼接）
-  from: Bytes!              # 转出地址
-  to: Bytes!                # 转入地址
+  from: User!               # 转出地址
+  to: User!                 # 转入地址
   value: BigInt!            # 转账数量（uint256）
   blockNumber: BigInt!      # 区块高度
   blockTimestamp: BigInt!   # 区块时间戳
@@ -14,5 +14,10 @@ type Transfer @entity(immutable: true) {
 type User @entity(immutable: false) {
   id: ID!                   # 用户地址（字符串类型，主键）
   balance: BigInt!          # 当前持仓余额
+
+  # 该用户作为 from 参与的所有转账
+  transfersFrom: [Transfer!]! @derivedFrom(field: "from")
+  # 该用户作为 to 参与的所有转账
+  transfersTo: [Transfer!]! @derivedFrom(field: "to")
 }
 

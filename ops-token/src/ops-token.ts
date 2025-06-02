@@ -11,14 +11,24 @@ export function handleTransfer(event: TransferEvent): void {
   let entity = new Transfer(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.from = event.params.from
-  entity.to = event.params.to
+  let fromUser = User.load(event.params.from.toHex())
+  if (!fromUser) {
+    fromUser = new User(event.params.from.toHex())
+    fromUser.balance = BigInt.fromI32(0)
+    fromUser.save()
+  }
+  let toUser = User.load(event.params.to.toHex())
+  if (!toUser) {
+    toUser = new User(event.params.to.toHex())
+    toUser.balance = BigInt.fromI32(0)
+    toUser.save()
+  }
+  entity.from = fromUser.id
+  entity.to = toUser.id
   entity.value = event.params.value
-
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
-
   entity.save()
 }
 
