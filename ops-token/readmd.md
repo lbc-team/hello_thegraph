@@ -104,14 +104,23 @@ https://thegraph.com/studio/subgraph/ops-token/playground
 
 ```
 {
+ 
   users(first: 5) {
     id
     balance
     transfersFrom {
-      id, value
+      id 
+      to {
+        id
+      }
+      value
     }
     transfersTo {
-      id, value
+      id
+      from {
+        id
+      }
+      value
     }
   }
 }
