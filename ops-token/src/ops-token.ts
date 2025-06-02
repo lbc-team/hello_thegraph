@@ -20,6 +20,9 @@ export function handleTransfer(event: TransferEvent): void {
   entity.transactionHash = event.transaction.hash
 
   entity.save()
+
+  // 更新用户余额
+  updateUserBalance(event.params.from, event.params.to, event.params.value)
 }
 
 function updateUserBalance(from: Address, to: Address, amount: BigInt): void {
@@ -32,6 +35,7 @@ function updateUserBalance(from: Address, to: Address, amount: BigInt): void {
 
     userFrom.balance = userFrom.balance.minus(amount)
     userFrom.save()
+    
   }
 
 
