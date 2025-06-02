@@ -87,7 +87,7 @@ export default function Home() {
         }
       }
     `;
-    const client = new GraphQLClient('https://api.studio.thegraph.com/query/112571/ops-token/version/latest');
+    const client = new GraphQLClient('https://api.studio.thegraph.com/query/112571/ops-token/version/v0.0.1');
     const res = await client.request(query, { addr: lowerAddr });
     let all = [...(res.transfersIn || []), ...(res.transfersOut || [])];
     all = all.filter((v, i, arr) => arr.findIndex(x => x.id === v.id) === i);
