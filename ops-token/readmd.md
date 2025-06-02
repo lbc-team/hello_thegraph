@@ -114,6 +114,13 @@ https://thegraph.com/studio/subgraph/ops-token/playground
     id
     balance
   }
+
+  balanceSnapshots(first: 5, where: {blockNumber_gt: "8423926"}) {
+    balance
+    blockNumber
+    blockTimestamp
+    user
+  }
 }
 ```
 
