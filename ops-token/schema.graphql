@@ -1,15 +1,18 @@
+# Transfer 实体，记录每一笔代币转账（不可变，适合做历史记录）
+# @entity 表示这个类型会被映射为一个可以被存储、查询的数据库表
 type Transfer @entity(immutable: true) {
-  id: Bytes!
-  from: Bytes! # address
-  to: Bytes! # address
-  value: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  id: Bytes!                # 唯一ID（通常用 transaction hash + log index 拼接）
+  from: Bytes!              # 转出地址
+  to: Bytes!                # 转入地址
+  value: BigInt!            # 转账数量（uint256）
+  blockNumber: BigInt!      # 区块高度
+  blockTimestamp: BigInt!   # 区块时间戳
+  transactionHash: Bytes!   # 交易哈希
 }
 
+# User 实体，记录用户的持仓余额（可变，余额会随转账变动）
 type User @entity(immutable: false) {
-	id: ID!
-  balance: BigInt!
+  id: ID!                   # 用户地址（字符串类型，主键）
+  balance: BigInt!          # 当前持仓余额
 }
 
