@@ -16,3 +16,15 @@ type User @entity(immutable: false) {
   balance: BigInt!          # 当前持仓余额
 }
 
+# BalanceSnapshot 实体，记录用户余额的快照
+# @entity 表示这个类型会被映射为一个可以被存储、查询的数据库表
+# immutable: true 代表快照不可变
+
+type BalanceSnapshot @entity(immutable: true) {
+  id: ID!                   # 唯一ID（用户地址 + 区块高度）
+  user: Bytes!              # 用户地址
+  balance: BigInt!          # 快照时的余额
+  blockNumber: BigInt!      # 区块高度
+  blockTimestamp: BigInt!   # 区块时间戳
+}
+
