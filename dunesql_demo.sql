@@ -20,18 +20,6 @@ WHERE
   block_time > CURRENT_TIMESTAMP - INTERVAL '1' day
 
 
--- 查询过去一周每天以太坊交易量：交易表里的时间（转换为day格式），交易量（单位以太币）
-SELECT  
-  DATE_TRUNC('day', block_time) AS day,
-  SUM(value / 1e18) AS total_value
-FROM ethereum.transactions
-WHERE
-  block_time > CURRENT_TIMESTAMP - INTERVAL '7' day
-GROUP BY
-  1
-ORDER BY
-  day DESC
-
 /** USDC 交易量 */
 select  value / 1000000 as v from  erc20_ethereum.evt_Transfer where contract_address = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 limit 1
 select  value / cast(power(10, 6) as uint256) as v from  erc20_ethereum.evt_Transfer where contract_address = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 limit 1
@@ -45,12 +33,27 @@ where contract_address = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
    and tr.evt_block_time > CURRENT_TIMESTAMP - Interval '1' day
 
 
+
+-- 查询过去一周每天以太坊交易量：交易表里的时间（转换为day格式），交易量（单位以太币）
+SELECT  
+  DATE_TRUNC('day', block_time) AS day,
+  SUM(value / 1e18) AS total_value
+FROM ethereum.transactions
+WHERE
+  block_time > CURRENT_TIMESTAMP - INTERVAL '7' day
+GROUP BY
+  1
+ORDER BY
+  day DESC
+
+
+
 -- 查询以太坊价格 过去一周的价格
 select day, price from prices.usd_daily where day > current_timestamp - interval '7' day and symbol = 'ETH' and contract_address is null
 
 
 -- 连表查询过去一周的以太坊交易量与价格
-    SELECT DATE_TRUNC('day', block_time) AS day, value / 1e18 AS eth_volume, price FROM ethereum.transactions t
+SELECT DATE_TRUNC('day', block_time) AS day, value / 1e18 AS eth_volume, price FROM ethereum.transactions t
     join prices.usd_daily d ON t.block_date = d.day
     WHERE 
     block_time > CURRENT_TIMESTAMP - INTERVAL '7' day
