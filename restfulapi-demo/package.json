@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "alchemy": "ts-node alchemy_api.ts",
+    "dune": "ts-node dune_query.ts",
+    "sim": "ts-node sim_api.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.9",
+    "dotenv": "^17.2.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
