@@ -53,6 +53,14 @@ count(address) as holders,
 sum(balance) as totalSupply
 from  query_5218166
 
+-- https://dune.com/queries/5218166
+
+select 
+count(address) as holders,
+sum(balance) as totalSupply
+from  query_6558387
+
+-- https://dune.com/queries/6558387
 
 -- 每日交易笔数
 select DATE_TRUNC('day', evt_block_time) day, count(*) as txs
